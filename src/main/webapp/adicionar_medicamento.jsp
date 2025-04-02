@@ -52,7 +52,6 @@
 
                     <form action="srvMedicamento" method="post">
 
-
                         <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
                             <input type="hidden" name="acao" value="<%=acao%>" />
                             <input type="hidden" name="id" value="<%=id%>">
