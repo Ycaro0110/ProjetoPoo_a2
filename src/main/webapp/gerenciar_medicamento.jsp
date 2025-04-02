@@ -40,8 +40,8 @@
                     <img src="imagens/medamor.png" width="300px" class="img-fluid" alt="Imagem responsiva"
                          style="margin-bottom: 200px;">
 
-                    <a href="adicionar_medicamento.jsp">
-                        <button id="btneditar" type="button" class="btn btn-primary">Editar Medicamento</button>
+                    <a href="adicionar_medicamento.jsp?acao=inclusao">
+                        <button id="btneditar" type="button" class="btn btn-primary">Adicionar Medicamento</button>
                     </a>
                     <a href="medicamento.jsp">
                         <button id="btncancelar" type="button" class="btn btn-secondary">Cancelar</button>
