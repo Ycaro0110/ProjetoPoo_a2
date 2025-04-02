@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
  * @author Ycaro
  */
 @NamedQuery(
-        name = "Medicamento.filtrarPornome",
+        name = "Medicamento.filtrarPorNome",
         query = "SELECT m FROM Medicamento m where m.nome like CONCAT('%',:nome,'%')")
 @Entity
 public class Medicamento implements Serializable {

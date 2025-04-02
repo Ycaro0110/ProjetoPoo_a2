@@ -90,9 +90,8 @@ public class MedicamentoDaoJpa implements InterfaceDao<Medicamento> {
     @Override
     public List<Medicamento> filtrarPornome(String nome) throws Exception {
      
-        EntityManager em = ConnFactory.getEntityManager();
-        
-        Query query = em.createNamedQuery("Medicamento.filtrarPornome");
+        EntityManager em = ConnFactory.getEntityManager();        
+        Query query = em.createNamedQuery("Medicamento.filtrarPorNome");
         query.setParameter("nome", nome);
         List<Medicamento> resultado = query.getResultList();
         return resultado;

@@ -9,11 +9,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author Ycaro
  */
+@NamedQuery(
+        name = "Paciente.filtrarPorNome",
+        query = "SELECT p FROM Paciente p where p.nome like CONCAT('%',:nome,'%')")
+
 @Entity
 public class Paciente implements Serializable {
 
