@@ -1,0 +1,68 @@
+.alturaPg{
+    height: 721px;
+}
+
+.conteudoesquerda{
+    width: 500px;
+    height: 680px;
+    background-color: #F8E9D8;
+    text-align: center;
+    padding: 30px;
+    
+}
+
+
+.conteudodireita{
+    width: 1012px;
+    height: 680px;
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+    
+}
+
+.form-control{
+    width: 500px;
+    height: 40px;
+    background-color: #F8E9D8;
+    
+}
+
+
+  /* Altera a cor do placeholder */
+  ::placeholder {
+    color: #4D3407 !important;
+    opacity: 1; /* Garante que a cor fique visível */
+  }
+
+  /* Para navegadores específicos */
+  :-ms-input-placeholder { color: #4D3407; } /* Internet Explorer */
+  ::-ms-input-placeholder { color: #4D3407; } /* Microsoft Edge */
+
+
+#btnsalvar{
+    margin: 50px;
+    background-color: #4D3407;
+    height: 50px;
+    width: 200px;
+    font-size: 130%;
+    
+}
+
+
+#btncancelar{
+    margin: 50px;
+    background-color: #FF0000;
+    height: 50px;
+    width: 200px;
+    font-size: 130%;
+    
+}
+
+
+
+.rodape{
+    height: 50px;
+    text-align: center;
+    padding-top: 10px;
+}

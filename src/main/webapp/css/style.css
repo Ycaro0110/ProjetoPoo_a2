@@ -1,0 +1,59 @@
+.alturaPg{
+
+    max-width: 2000px;
+
+}
+
+.conteudoesquerda{
+    width: 500px;
+    height: 680px;
+    background-color: #F8E9D8;
+    text-align: center;
+    padding: 30px;
+
+}
+
+#btngeral{
+    margin: 30px;
+    background-color: #4D3407;
+    height: 60px;
+    width: 300px;
+    font-size: 150%;
+}
+
+
+
+.conteudodireita{
+    width: 1012px;
+    height: 680px;
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+
+}
+
+.form-control{
+    width: 500px;
+    height: 40px;
+    background-color: #F8E9D8;
+
+}
+
+
+#btncancelar{
+    margin: 50px;
+    background-color: #FF0000;
+    height: 50px;
+    width: 200px;
+    font-size: 130%;
+
+}
+
+.rodape{
+    height: 50px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+
+

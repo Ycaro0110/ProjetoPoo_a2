@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <servlet>
+        <servlet-name>srvMedicamento</servlet-name>
+        <servlet-class>controller.srvMedicamento</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvPaciente</servlet-name>
+        <servlet-class>controller.srvPaciente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvReceita</servlet-name>
+        <servlet-class>controller.srvReceita</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>srvMedicamento</servlet-name>
+        <url-pattern>/srvMedicamento</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvPaciente</servlet-name>
+        <url-pattern>/srvPaciente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvReceita</servlet-name>
+        <url-pattern>/srvReceita</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>

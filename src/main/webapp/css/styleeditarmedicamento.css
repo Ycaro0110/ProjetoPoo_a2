@@ -1,0 +1,54 @@
+.alturaPg{
+    height: 721px;
+}
+
+.conteudoesquerda{
+    width: 500px;
+    height: 680px;
+    background-color: #F8E9D8;
+    text-align: center;
+    padding: 30px;
+    
+}
+
+
+.conteudodireita{
+    width: 1012px;
+    height: 680px;
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+    
+}
+
+.form-control{
+    height: 40px;
+    background-color: #F8E9D8;
+    
+}
+
+
+#btneditar{
+    margin-bottom: 10px;
+    background-color: #4D3407;
+    height: 50px;
+    width: 300px;
+    font-size: 130%;
+    
+}
+
+
+#btncancelar{
+    
+    background-color: #FF0000;
+    height: 50px;
+    width: 300px;
+    font-size: 130%;
+    
+}
+
+.rodape{
+    height: 50px;
+    text-align: center;
+    padding-top: 10px;
+}
