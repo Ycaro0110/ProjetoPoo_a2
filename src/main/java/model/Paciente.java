@@ -30,11 +30,9 @@ public class Paciente implements Serializable {
     private String cpf;
     private String endereco;
     private String cidade;
-    
-    
-      public Paciente() {
-    } 
-    
+
+    public Paciente() {
+    }
 
     public Paciente(String nome, String cpf, String endereco, String cidade) {
         this.nome = nome;
@@ -74,7 +72,6 @@ public class Paciente implements Serializable {
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
-    
 
     public Long getId() {
         return id;
@@ -83,10 +80,6 @@ public class Paciente implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-  
-    
-    
 
     @Override
     public int hashCode() {
@@ -109,5 +102,5 @@ public class Paciente implements Serializable {
     public String toString() {
         return "model.Paciente[ id=" + id + " ]";
     }
-    
+
 }

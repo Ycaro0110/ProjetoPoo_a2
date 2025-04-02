@@ -12,10 +12,10 @@
         String listaHtml = request.getParameter("lista");
         String acao = request.getParameter("acao");
         String pesquisar = request.getParameter("nomePesquisa");
-       String id = request.getParameter("id");
-        
-       pesquisar = "";
-       
+        String id = request.getParameter("id");
+
+        pesquisar = "";
+
 
     %>
 
@@ -52,15 +52,16 @@
                      style="padding: 100px; display: flex; flex-direction: column; align-items: center;">
                     <h1 class="display-4" style="color: #4D3407; margin-bottom: 30px;">Gerenciar Medicamentos</h1>
 
-                    <form action="srvMedicamento?acao=pesquisarPorNome" method="post"> 
+
+                    <form action="srvMedicamento?acao=pesquisarPorNome" method="post" display="flex" class="form-row m-1"> 
                         <input type="hidden" name="acao" value="<%=acao%>" />
-                        
+
                         <input type="text" class="form-control" style="text-align: right; width: 500px;"
                                placeholder="Pesquisar" name="nomePesquisa"> 
 
-                        <button id="idPesquisar" type="submit" class="btn btn-primary">Pesquisar</button>
+                        <button id="idPesquisar" type="submit" class="btn btn-primary" class="m-0">Pesquisar</button>
                     </form>
-
+                    
 
                     <div class="table-responsive mt-3">
                         <table class="table table-bordered table-hover  ">
