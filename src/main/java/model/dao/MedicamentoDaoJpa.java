@@ -6,6 +6,7 @@ package model.dao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import model.Medicamento;
 
 /**
@@ -84,6 +85,19 @@ public class MedicamentoDaoJpa implements InterfaceDao<Medicamento> {
             em.close();
         }
         return lista;
+    }
+
+    @Override
+    public List<Medicamento> filtrarPornome(String nome) throws Exception {
+     
+        EntityManager em = ConnFactory.getEntityManager();
+        
+        Query query = em.createNamedQuery("Medicamento.filtrarPornome");
+        query.setParameter("nome", nome);
+        List<Medicamento> resultado = query.getResultList();
+        return resultado;
+
+
     }
 
 }

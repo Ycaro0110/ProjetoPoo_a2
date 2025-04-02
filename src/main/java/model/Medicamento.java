@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,6 +18,9 @@ import javax.persistence.TemporalType;
  *
  * @author Ycaro
  */
+@NamedQuery(
+        name = "Medicamento.filtrarPornome",
+        query = "SELECT m FROM Medicamento m where m.nome like CONCAT('%',:nome,'%')")
 @Entity
 public class Medicamento implements Serializable {
 
@@ -27,20 +31,19 @@ public class Medicamento implements Serializable {
     private String nome;
     private String nomeComercial;
     private double dose;
-    
+
     @Temporal(TemporalType.DATE)
     private Calendar dtValidade;
 
     public Medicamento() {
-    }       
+    }
 
     public Medicamento(String nome, String nomeComercial, double dose, Calendar dtValidade) {
         this.nome = nome;
         this.nomeComercial = nomeComercial;
         this.dose = dose;
         this.dtValidade = dtValidade;
-    } 
-        
+    }
 
     public String getNome() {
         return nome;
@@ -72,7 +75,7 @@ public class Medicamento implements Serializable {
 
     public void setDtValidade(Calendar dtValidade) {
         this.dtValidade = dtValidade;
-    }      
+    }
 
     public Long getId() {
         return id;
@@ -104,6 +107,4 @@ public class Medicamento implements Serializable {
         return "model.Medicamento[ id=" + id + " ]";
     }
 
-   
-    
 }

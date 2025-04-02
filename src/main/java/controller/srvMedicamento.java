@@ -41,7 +41,7 @@ public class srvMedicamento extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-
+            String pesquisar = request.getParameter("nomePesquisa");
             String acao = request.getParameter("acao");
             String id = request.getParameter("id");
 
@@ -134,6 +134,12 @@ public class srvMedicamento extends HttpServlet {
                     rd.forward(request, response);
                     break;
 
+                case "pesquisarPorNome":
+                    rd = request.getRequestDispatcher("gerenciar_medicamento.jsp?lista=" + listagemFiltrada(pesquisar));
+                    rd.forward(request, response);
+                    pesquisar = " ";
+                    break;
+
             }
 
         } catch (Exception e) {
@@ -163,7 +169,7 @@ public class srvMedicamento extends HttpServlet {
         for (Medicamento m : lista) {
             listaHTML = listaHTML
                     + "<tr>"
-                    + "<td>" + m.getNome() + "</td>" 
+                    + "<td>" + m.getNome() + "</td>"
                     + "<td>" + m.getNomeComercial() + "</td>"
                     + "<td>" + m.getDose() + "</td> "
                     + "<td>" + m.getDtValidade().getTime() + "</td>"
@@ -178,6 +184,40 @@ public class srvMedicamento extends HttpServlet {
                     + "</tr>";
         }
 
+        return listaHTML;
+    }
+
+    private String listagemFiltrada(String nome) {
+        InterfaceDao dao = new MedicamentoDaoJpa();
+        List<Medicamento> lista = null;
+        try {
+            lista = dao.filtrarPornome(nome);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        if (lista == null || lista.isEmpty()) {
+            return "<p>Nenhum medicamento encontrado.</p>"; // Retorna uma mensagem ou outra resposta adequada
+        }
+
+        String listaHTML = "";
+        for (Medicamento m : lista) {
+            listaHTML = listaHTML
+                    + "<tr>"
+                    + "<td>" + m.getNome() + "</td>"
+                    + "<td>" + m.getNomeComercial() + "</td>"
+                    + "<td>" + m.getDose() + "</td> "
+                    + "<td>" + m.getDtValidade().getTime() + "</td>"
+                    + "<td> <form action=srvMedicamento?acao=pre-edicao method='POST'>"
+                    + "<input type='hidden' name='id' value="
+                    + m.getId() + "><input type='submit' class=\"btn btn-primary\" value=editar>"
+                    + "</form> </td>"
+                    + "<form action=srvMedicamento?acao=exclusao method='POST'>"
+                    + "<td><input type='hidden' name='id' value="
+                    + m.getId() + "><input type='submit' class=\"btn btn-primary\" value=excluir></td>"
+                    + "</form>"
+                    + "</tr>";
+        }
         return listaHTML;
     }
 

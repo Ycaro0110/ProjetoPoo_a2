@@ -23,4 +23,8 @@ public interface InterfaceDao<T> {
 
     public abstract List<T> listar() throws Exception;
     
+    public abstract  List<T> filtrarPornome(String nome) throws Exception;
+    
+    
+    
 }
