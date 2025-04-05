@@ -9,7 +9,7 @@
     height: 680px;
     background-color: #F8E9D8;
     text-align: center;
-    padding: 30px;
+    padding: 10px;
 
 }
 
@@ -23,7 +23,7 @@
 
 
 
-.conteudodireita{
+ .conteudodireita{
     width: 1012px;
     height: 680px;
     background-color: white;
@@ -34,7 +34,7 @@
 
 .form-control{
     width: 500px;
-    height: 40px;
+    height: 30px;
     background-color: #F8E9D8;
 
 }

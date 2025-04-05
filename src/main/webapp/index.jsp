@@ -19,8 +19,8 @@
     <body>
 
 
-        <div class="conteudo">
-            <div class="row">
+        <div class="conteudo" >
+            <div >
                 <div class="conteudoesquerda">
                     <img src="imagens/medamor.png" width="300px" class="img-fluid" alt="Imagem responsiva">
                     <div id="botoes">
@@ -42,14 +42,14 @@
                 <div class="conteudodireita" style="display: flex; flex-direction: column; align-items: center" >
                     <div>
                         <input type="texto" class="form-control" style="text-align: right" placeholder="Pesquisar">
-                    </div>
+                    </div>              
 
                     <div>
 
 
-                    </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <footer>

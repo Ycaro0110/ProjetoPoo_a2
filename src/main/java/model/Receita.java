@@ -15,11 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author Ycaro
  */
+@NamedQuery(
+        name = "Receita.filtrarPorNomeMedico",
+        query = "SELECT r FROM Receita r where r.nomeMedico like CONCAT('%',:nome,'%')")
 @Entity
 public class Receita implements Serializable {
 
