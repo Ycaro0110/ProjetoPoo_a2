@@ -10,7 +10,6 @@
 
     <%
         String acao = request.getParameter("acao");
-
         String id = request.getParameter("id");
         String nome = request.getParameter("nome");
         String nomeCom = request.getParameter("nomeCom");
