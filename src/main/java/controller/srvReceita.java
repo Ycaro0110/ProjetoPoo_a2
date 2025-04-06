@@ -1,74 +1,141 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
 
-/**
- *
- * @author Ycaro
- */
+import model.*;
+import model.dao.*;
+
+@WebServlet(name = "srvReceita", urlPatterns = {"/srvReceita"})
 public class srvReceita extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String acao = request.getParameter("acao");
+
+        try {
+            InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
+            InterfaceDao<Paciente> daoPaciente = DaoFactory.novoPacienteDAO();
+            InterfaceDao<Medicamento> daoMedicamento = DaoFactory.novoMedicamentoDAO();
+
+            if (acao == null || acao.equals("listar")) {
+                List<Receita> lista = daoReceita.listar();
+                request.setAttribute("receitas", lista);
+                request.getRequestDispatcher("gerenciar_receita.jsp").forward(request, response);
+            }
+
+            if (acao.equals("novo")) {
+                List<Paciente> pacientes = daoPaciente.listar();
+                List<Medicamento> medicamentos = daoMedicamento.listar();
+
+                request.setAttribute("pacientes", pacientes);
+                request.setAttribute("medicamentos", medicamentos);
+                request.getRequestDispatcher("adicionar_receita.jsp").forward(request, response);
+            }
+
+            if (acao.equals("excluir")) {
+                long id = Long.parseLong(request.getParameter("id"));
+                Receita r = daoReceita.pesquisarPorId(id);
+                daoReceita.excluir(r);
+                response.sendRedirect("srvReceita?acao=listar");
+            }
+
+            if (acao.equals("editar")) {
+                long id = Long.parseLong(request.getParameter("id"));
+                Receita r = daoReceita.pesquisarPorId(id);
+
+                List<Paciente> pacientes = daoPaciente.listar();
+                List<Medicamento> medicamentos = daoMedicamento.listar();
+
+                request.setAttribute("receita", r);
+                request.setAttribute("pacientes", pacientes);
+                request.setAttribute("medicamentos", medicamentos);
+
+                request.getRequestDispatcher("editar_receita.jsp").forward(request, response);
+            }
+
+        } catch (Exception e) {
+            throw new ServletException(e.getMessage());
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String acao = request.getParameter("acao");
+
+        try {
+            InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
+            InterfaceDao<Paciente> daoPaciente = DaoFactory.novoPacienteDAO();
+            InterfaceDao<Medicamento> daoMedicamento = DaoFactory.novoMedicamentoDAO();
+
+            if (acao.equals("salvar")) {
+                long idPaciente = Long.parseLong(request.getParameter("paciente"));
+                String[] idsMedicamentos = request.getParameterValues("medicamento");
+                String nomeMedico = request.getParameter("nomeMedico");
+
+                Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
+                List<Medicamento> listaMedicamentos = new ArrayList<>();
+
+                for (String idMed : idsMedicamentos) {
+                    Medicamento m = daoMedicamento.pesquisarPorId(Long.parseLong(idMed));
+                    listaMedicamentos.add(m);
+                }
+
+                Receita nova = new Receita();
+                nova.setPaciente(paciente);
+                nova.setMedicamentos(listaMedicamentos);
+                nova.setNomeMedico(nomeMedico);
+
+                // LOG DE DEPURAÇÃO
+                System.out.println("====== SALVANDO RECEITA ======");
+                System.out.println("Médico: " + nova.getNomeMedico());
+                System.out.println("Paciente: " + (paciente != null ? paciente.getNome() : "Paciente nulo"));
+                System.out.println("Medicamentos:");
+                for (Medicamento med : listaMedicamentos) {
+                    System.out.println(" - " + med.getNome());
+                }
+                System.out.println("================================");
+
+                daoReceita.incluir(nova);
+                response.sendRedirect("srvReceita?acao=listar");
+            }
+
+            if (acao.equals("atualizar")) {
+                long id = Long.parseLong(request.getParameter("id"));
+                long idPaciente = Long.parseLong(request.getParameter("paciente"));
+                String[] idsMedicamentos = request.getParameterValues("medicamento");
+                String nomeMedico = request.getParameter("nomeMedico");
+
+                Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
+                List<Medicamento> listaMedicamentos = new ArrayList<>();
+
+                for (String idMed : idsMedicamentos) {
+                    Medicamento m = daoMedicamento.pesquisarPorId(Long.parseLong(idMed));
+                    listaMedicamentos.add(m);
+                }
+
+                Receita r = daoReceita.pesquisarPorId(id);
+                r.setPaciente(paciente);
+                r.setMedicamentos(listaMedicamentos);
+                r.setNomeMedico(nomeMedico);
+
+                daoReceita.editar(r);
+                response.sendRedirect("srvReceita?acao=listar");
+            }
+
+        } catch (Exception e) {
+            throw new ServletException(e.getMessage());
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Controlador de receitas";
+    }
 }
