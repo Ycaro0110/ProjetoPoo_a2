@@ -14,6 +14,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="css/bootstrap.min.css">
+
+        <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/styleeditarmedicamento.css">
     </head>
 
@@ -22,13 +24,12 @@
 
         <div class="conteudo">
             <div class="row">
-                <div class="conteudoesquerda"
-                     style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="conteudoesquerda" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                     <img src="imagens/medamor.png" width="300px" class="img-fluid" alt="Imagem responsiva"
                          style="margin-bottom: 200px;">
 
                     <a href="editar_receita_form.jsp">
-                        <button id="btneditar" type="button" class="btn btn-primary">Editar Receita</button>
+                        <button id="btneditar" type="button" class="btn btn-primary">Adicionar Receita</button>
                     </a>
                     <a href="receita.jsp">
                         <button id="btncancelar" type="button" class="btn btn-secondary">Cancelar</button>
@@ -37,7 +38,7 @@
 
                 <div class="conteudodireita"
                      style="padding: 100px; display: flex; flex-direction: column; align-items: center;">
-                    <h1 class="display-4" style="color: #4D3407; margin-bottom: 30px;">Editar Receita</h1>
+                    <h1 class="display-4" style="color: #4D3407; margin-bottom: 30px;">Gerenciar Receita</h1>
                     <input type="text" class="form-control" style="text-align: right; width: 500px;"
                            placeholder="Pesquisar">
                 </div>

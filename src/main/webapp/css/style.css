@@ -1,6 +1,6 @@
 .alturaPg{
 
-    max-width: 2000px;
+    
 
 }
 
@@ -21,14 +21,12 @@
     font-size: 150%;
 }
 
-
-
  .conteudodireita{
     width: 1012px;
     height: 680px;
     background-color: white;
     text-align: center;
-    padding: 20px;
+    padding: 30px;
 
 }
 
@@ -38,7 +36,6 @@
     background-color: #F8E9D8;
 
 }
-
 
 #btncancelar{
     margin: 50px;

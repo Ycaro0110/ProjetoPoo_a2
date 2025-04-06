@@ -14,11 +14,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css">
+           <link rel="stylesheet" href="css/styleeditarmedicamento.css">
     </head>
 
     <body>
-
-
         <div class="conteudo">
             <div class="row">
                 <div class="conteudoesquerda" style="display: flex; justify-content: center; align-items: center;">
@@ -44,7 +43,6 @@
                         <button id="btncancelar" type="button" class="btn btn-primary" style="float: right;">Cancelar</button>
                     </a>
                 </div>
-
             </div>
         </div>
 
