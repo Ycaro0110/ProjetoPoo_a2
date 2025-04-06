@@ -1,18 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.dao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import model.Paciente;
 
-/**
- *
- * @author Ycaro
- */
 public class PacienteDaoJpa implements InterfaceDao<Paciente> {
 
     @Override
@@ -22,6 +13,9 @@ public class PacienteDaoJpa implements InterfaceDao<Paciente> {
             em.getTransaction().begin();
             em.persist(entidade);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new Exception("Erro ao incluir paciente: " + e.getMessage(), e);
         } finally {
             em.close();
         }
@@ -34,6 +28,9 @@ public class PacienteDaoJpa implements InterfaceDao<Paciente> {
             em.getTransaction().begin();
             em.merge(entidade);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new Exception("Erro ao editar paciente: " + e.getMessage(), e);
         } finally {
             em.close();
         }
@@ -45,52 +42,68 @@ public class PacienteDaoJpa implements InterfaceDao<Paciente> {
         try {
             em.getTransaction().begin();
             Paciente p = em.find(Paciente.class, entidade.getId());
-            em.remove(p);
+            if (p != null) {
+                em.remove(p);
+            } else {
+                throw new Exception("Paciente com ID " + entidade.getId() + " não encontrado para exclusão.");
+            }
             em.getTransaction().commit();
         } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new Exception("Erro ao excluir paciente: " + e.getMessage(), e);
+        } finally {
             em.close();
         }
     }
 
     @Override
     public Paciente pesquisarPorId(long id) throws Exception {
-        Paciente p = null;
         EntityManager em = ConnFactory.getEntityManager();
         try {
             em.getTransaction().begin();
-
-            p = em.find(Paciente.class, id);
-
+            Paciente p = em.find(Paciente.class, id);
             em.getTransaction().commit();
+            if (p == null) {
+                throw new Exception("Paciente com ID " + id + " não encontrado.");
+            }
+            return p;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new Exception("Erro ao pesquisar paciente por ID: " + e.getMessage(), e);
         } finally {
             em.close();
         }
-        return p;
     }
 
     @Override
     public List<Paciente> listar() throws Exception {
-
-        List<Paciente> lista = null;
         EntityManager em = ConnFactory.getEntityManager();
         try {
             em.getTransaction().begin();
-            lista = em.createQuery("FROM Paciente p").getResultList();
+            List<Paciente> lista = em.createQuery("FROM Paciente p", Paciente.class).getResultList();
             em.getTransaction().commit();
+            return lista;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new Exception("Erro ao listar pacientes: " + e.getMessage(), e);
         } finally {
             em.close();
         }
-        return lista;
-
     }
 
     @Override
     public List<Paciente> filtrarPornome(String nome) throws Exception {
         EntityManager em = ConnFactory.getEntityManager();
-        Query query = em.createNamedQuery("Paciente.filtrarPorNome");
-        query.setParameter("nome", nome);
-        List<Paciente> resultado = query.getResultList();
-        return resultado;
+        try {
+            return em.createQuery(
+                "SELECT p FROM Paciente p WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%'))",
+                Paciente.class
+            ).setParameter("nome", nome).getResultList();
+        } catch (Exception e) {
+            throw new Exception("Erro ao filtrar pacientes por nome: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
     }
-
 }
+
