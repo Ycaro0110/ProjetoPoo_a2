@@ -34,18 +34,17 @@ public class ReceitaDaoJpa implements InterfaceDao<Receita> {
     @Override
     public void excluir(Receita entidade) throws Exception {
         EntityManager em = ConnFactory.getEntityManager();
-         try {
+        try {
             em.getTransaction().begin();
             Receita r = em.find(Receita.class, entidade.getId());
-        if (r != null) {
-            em.remove(r);
-        }
-        em.getTransaction().commit(); // isso deve estar fora do if
+            if (r != null) {
+                em.remove(r);
+            }
+            em.getTransaction().commit();
         } finally {
-        em.close();
+            em.close();
         }
     }
-
 
     @Override
     public Receita pesquisarPorId(long id) throws Exception {
@@ -57,11 +56,27 @@ public class ReceitaDaoJpa implements InterfaceDao<Receita> {
         }
     }
 
+    public Receita buscarComMedicamentos(long id) throws Exception {
+        EntityManager em = ConnFactory.getEntityManager();
+        try {
+            return em.createQuery(
+                "SELECT r FROM Receita r LEFT JOIN FETCH r.medicamentos WHERE r.id = :id", Receita.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
     @Override
     public List<Receita> listar() throws Exception {
         EntityManager em = ConnFactory.getEntityManager();
         try {
-            return em.createQuery("FROM Receita", Receita.class).getResultList();
+            return em.createQuery(
+                "SELECT DISTINCT r FROM Receita r " +
+                "JOIN FETCH r.paciente " +
+                "LEFT JOIN FETCH r.medicamentos", Receita.class)
+                .getResultList();
         } finally {
             em.close();
         }
@@ -72,11 +87,10 @@ public class ReceitaDaoJpa implements InterfaceDao<Receita> {
         EntityManager em = ConnFactory.getEntityManager();
         try {
             Query query = em.createNamedQuery("Receita.filtrarPorNomeMedico");
-            query.setParameter("nome", nome); // Corrigido o nome do parâmetro
+            query.setParameter("nome", nome);
             return query.getResultList();
         } finally {
             em.close();
         }
     }
 }
-

@@ -27,6 +27,14 @@ public class srvReceita extends HttpServlet {
 
             if (acao == null || acao.equals("listar")) {
                 List<Receita> lista = daoReceita.listar();
+
+                // Força carregamento da lista de medicamentos (evita LazyInitializationException)
+                for (Receita r : lista) {
+                    if (r.getMedicamentos() != null) {
+                        r.getMedicamentos().size();
+                    }
+                }
+
                 request.setAttribute("receitas", lista);
                 request.getRequestDispatcher("gerenciar_receita.jsp").forward(request, response);
             }
@@ -37,6 +45,7 @@ public class srvReceita extends HttpServlet {
 
                 request.setAttribute("pacientes", pacientes);
                 request.setAttribute("medicamentos", medicamentos);
+                request.setAttribute("acao", "salvar");
                 request.getRequestDispatcher("adicionar_receita.jsp").forward(request, response);
             }
 
@@ -49,7 +58,9 @@ public class srvReceita extends HttpServlet {
 
             if (acao.equals("editar")) {
                 long id = Long.parseLong(request.getParameter("id"));
-                Receita r = daoReceita.pesquisarPorId(id);
+
+                // Usa método com JOIN FETCH para evitar LazyInitializationException
+                Receita r = ((ReceitaDaoJpa) daoReceita).buscarComMedicamentos(id);
 
                 List<Paciente> pacientes = daoPaciente.listar();
                 List<Medicamento> medicamentos = daoMedicamento.listar();
@@ -57,55 +68,49 @@ public class srvReceita extends HttpServlet {
                 request.setAttribute("receita", r);
                 request.setAttribute("pacientes", pacientes);
                 request.setAttribute("medicamentos", medicamentos);
+                request.setAttribute("acao", "atualizar");
+                request.setAttribute("id", r.getId());
+                request.setAttribute("nomeMedico", r.getNomeMedico());
 
-                request.getRequestDispatcher("editar_receita.jsp").forward(request, response);
+                request.getRequestDispatcher("adicionar_receita.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
-            throw new ServletException(e.getMessage());
+            throw new ServletException("Erro ao processar ação: " + e.getMessage(), e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {      
+            throws ServletException, IOException {
 
         String acao = request.getParameter("acao");
 
         try {
-
             InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
             InterfaceDao<Paciente> daoPaciente = DaoFactory.novoPacienteDAO();
             InterfaceDao<Medicamento> daoMedicamento = DaoFactory.novoMedicamentoDAO();
 
-            if (acao.equals("salvar")) {
+            // Dados do formulário
+            long idPaciente = Long.parseLong(request.getParameter("paciente"));
+            String[] idsMedicamentos = request.getParameterValues("medicamento");
+            String nomeMedico = request.getParameter("nomeMedico");
 
-                long idPaciente = Long.parseLong(request.getParameter("paciente"));
-                String[] idsMedicamentos = request.getParameterValues("medicamento");
-                String nomeMedico = request.getParameter("nomeMedico");
+            Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
+            List<Medicamento> listaMedicamentos = new ArrayList<>();
 
-                Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
-                List<Medicamento> listaMedicamentos = new ArrayList<>();
-
+            if (idsMedicamentos != null) {
                 for (String idMed : idsMedicamentos) {
                     Medicamento m = daoMedicamento.pesquisarPorId(Long.parseLong(idMed));
                     listaMedicamentos.add(m);
                 }
+            }
 
+            if (acao.equals("salvar")) {
                 Receita nova = new Receita();
                 nova.setPaciente(paciente);
                 nova.setMedicamentos(listaMedicamentos);
                 nova.setNomeMedico(nomeMedico);
-
-                // LOG DE DEPURAÇÃO
-                System.out.println("====== SALVANDO RECEITA ======");
-                System.out.println("Médico: " + nova.getNomeMedico());
-                System.out.println("Paciente: " + (paciente != null ? paciente.getNome() : "Paciente nulo"));
-                System.out.println("Medicamentos:");
-                for (Medicamento med : listaMedicamentos) {
-                    System.out.println(" - " + med.getNome());
-                }
-                System.out.println("================================");
 
                 daoReceita.incluir(nova);
                 response.sendRedirect("srvReceita?acao=listar");
@@ -113,18 +118,6 @@ public class srvReceita extends HttpServlet {
 
             if (acao.equals("atualizar")) {
                 long id = Long.parseLong(request.getParameter("id"));
-                long idPaciente = Long.parseLong(request.getParameter("paciente"));
-                String[] idsMedicamentos = request.getParameterValues("medicamento");
-                String nomeMedico = request.getParameter("nomeMedico");
-
-                Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
-                List<Medicamento> listaMedicamentos = new ArrayList<>();
-
-                for (String idMed : idsMedicamentos) {
-                    Medicamento m = daoMedicamento.pesquisarPorId(Long.parseLong(idMed));
-                    listaMedicamentos.add(m);
-                }
-
                 Receita r = daoReceita.pesquisarPorId(id);
                 r.setPaciente(paciente);
                 r.setMedicamentos(listaMedicamentos);
@@ -135,7 +128,8 @@ public class srvReceita extends HttpServlet {
             }
 
         } catch (Exception e) {
-            Logger.getLogger(srvMedicamento.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(srvReceita.class.getName()).log(Level.SEVERE, null, e);
+            throw new ServletException("Erro ao salvar ou atualizar receita: " + e.getMessage(), e);
         }
     }
 

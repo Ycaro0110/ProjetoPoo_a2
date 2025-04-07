@@ -73,8 +73,8 @@
                                         </ul>
                                     </td>
                                     <td>
-                                        <a href="srvReceita?acao=editar&id=<%= r.getId() %>" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="srvReceita?acao=excluir&id=<%= r.getId() %>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
+                                        <a href="srvReceita?acao=editar&id=<%= r.getId() %>" class="btn btn-sm" style="background-color: #4d3407; color: white;">Editar</a>
+                                           <a href="srvReceita?acao=excluir&id=<%= r.getId() %>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
                                     </td>
                                 </tr>
                             <% 
