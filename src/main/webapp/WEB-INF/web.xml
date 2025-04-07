@@ -23,7 +23,7 @@
     <servlet-mapping>
         <servlet-name>srvReceita</servlet-name>
         <url-pattern>/srvReceita</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>  
     <session-config>
         <session-timeout>
             30

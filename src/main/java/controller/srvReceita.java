@@ -67,14 +67,16 @@ public class srvReceita extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String acao = request.getParameter("acao");
 
+        String acao = request.getParameter("acao");
         try {
+
             InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
             InterfaceDao<Paciente> daoPaciente = DaoFactory.novoPacienteDAO();
             InterfaceDao<Medicamento> daoMedicamento = DaoFactory.novoMedicamentoDAO();
 
             if (acao.equals("salvar")) {
+                System.out.println("teste");
                 long idPaciente = Long.parseLong(request.getParameter("paciente"));
                 String[] idsMedicamentos = request.getParameterValues("medicamento");
                 String nomeMedico = request.getParameter("nomeMedico");
@@ -130,7 +132,8 @@ public class srvReceita extends HttpServlet {
             }
 
         } catch (Exception e) {
-            throw new ServletException(e.getMessage());
+            e.printStackTrace(); // loga a stack trace completa
+            throw new ServletException("Erro ao processar receita", e);
         }
     }
 
