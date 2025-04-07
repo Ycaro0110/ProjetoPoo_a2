@@ -9,5 +9,10 @@ public class DaoFactory {
     public static InterfaceDao novoPacienteDAO() {
         return new PacienteDaoJpa();
     }
+
+    public static InterfaceDao novoReceitaDAO() {
+        return new ReceitaDaoJpa();
+    }
 }
+
 
