@@ -46,7 +46,7 @@
                             <h4 style="color: #4D3407;">Informações da Receita</h4>
                         </div>
 
-                        <form action="srvReceita" method="post">
+                        <form action="srvReceita?acao=salvar" method="post">
                             <input type="hidden" name="acao" value="<%=acao%>">
                             <input type="hidden" name="id" value="<%=id%>">
 

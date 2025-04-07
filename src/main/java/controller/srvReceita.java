@@ -3,6 +3,8 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -66,9 +68,10 @@ public class srvReceita extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {      
 
         String acao = request.getParameter("acao");
+
         try {
 
             InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
@@ -76,7 +79,7 @@ public class srvReceita extends HttpServlet {
             InterfaceDao<Medicamento> daoMedicamento = DaoFactory.novoMedicamentoDAO();
 
             if (acao.equals("salvar")) {
-                System.out.println("teste");
+
                 long idPaciente = Long.parseLong(request.getParameter("paciente"));
                 String[] idsMedicamentos = request.getParameterValues("medicamento");
                 String nomeMedico = request.getParameter("nomeMedico");
@@ -132,8 +135,7 @@ public class srvReceita extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // loga a stack trace completa
-            throw new ServletException("Erro ao processar receita", e);
+            Logger.getLogger(srvMedicamento.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
