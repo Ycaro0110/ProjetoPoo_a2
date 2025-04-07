@@ -14,7 +14,7 @@ public class ReceitaDaoJpa implements InterfaceDao<Receita> {
         try {
             em.getTransaction().begin();
 
-            em.persist(entidade);
+            em.merge(entidade);
 
             em.getTransaction().commit();
         } finally {

@@ -37,7 +37,7 @@ public class Receita implements Serializable {
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(name = "receita_medicamento",
             joinColumns = @JoinColumn(name = "receita_id"),
             inverseJoinColumns = @JoinColumn(name = "medicamento_id"))
