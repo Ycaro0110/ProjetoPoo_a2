@@ -85,6 +85,12 @@ public class srvReceita extends HttpServlet {
             throws ServletException, IOException {
 
         String acao = request.getParameter("acao");
+        String[] idmedicamentos = request.getParameterValues("medicamentosID");
+
+        for (String id : idmedicamentos) {
+            System.out.println("Medicamento ID: " + id);
+            // Aqui você pode, por exemplo, buscar o medicamento por ID no banco
+        }
 
         try {
             InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
@@ -93,7 +99,7 @@ public class srvReceita extends HttpServlet {
 
             // Dados do formulário
             long idPaciente = Long.parseLong(request.getParameter("paciente"));
-            String[] idsMedicamentos = request.getParameterValues("medicamento");
+            String[] idsMedicamentos = request.getParameterValues("medicamentosID");
             String nomeMedico = request.getParameter("nomeMedico");
 
             Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
@@ -107,9 +113,18 @@ public class srvReceita extends HttpServlet {
             }
 
             if (acao.equals("salvar")) {
+
+                if (idsMedicamentos != null) {
+                    for (String idMed : idsMedicamentos) {
+                        Medicamento m = daoMedicamento.pesquisarPorId(Long.parseLong(idMed));
+                        listaMedicamentos.add(m);
+                    }
+                }
+
                 Receita nova = new Receita();
                 nova.setPaciente(paciente);
                 nova.setMedicamentos(listaMedicamentos);
+
                 nova.setNomeMedico(nomeMedico);
 
                 daoReceita.incluir(nova);

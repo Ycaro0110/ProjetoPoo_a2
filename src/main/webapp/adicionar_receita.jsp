@@ -9,7 +9,7 @@
     String acao = (String) request.getAttribute("acao");
     String id = request.getAttribute("id") != null ? request.getAttribute("id").toString() : "";
     String nomeMedico = request.getAttribute("nomeMedico") != null ? request.getAttribute("nomeMedico").toString() : "";
-
+   
     List<Paciente> pacientes = (List<Paciente>) request.getAttribute("pacientes");
     List<Medicamento> medicamentos = (List<Medicamento>) request.getAttribute("medicamentos");
     Receita receita = (Receita) request.getAttribute("receita");
@@ -61,7 +61,7 @@
                     <div class="form-group">
                         <label for="medicamento">Adicionar Medicamento</label>
                         <div class="d-flex">
-                            <select id="selectMedicamento" class="form-control" style="flex:1; margin-right:10px;">
+                            <select id="selectMedicamento" class="form-control" style="flex:1; margin-right:10px;" multiple name="medicamentosID">
                                 <option value="">Selecione um medicamento</option>
                                 <% if (medicamentos != null) {
                                     for (Medicamento m : medicamentos) {
@@ -122,8 +122,8 @@
     <script>
         function adicionarMedicamento() {
             const select = document.getElementById("selectMedicamento");
-            const id = select.value;
-            const nome = select.options[select.selectedIndex].getAttribute("data-nome");
+            let id = select.value;
+            let nome = select.options[select.selectedIndex].getAttribute("data-nome");
 
             if (!id || !nome) return;
 
@@ -134,12 +134,13 @@
                 return;
             }
 
-            const li = document.createElement("li");
+            let li = document.createElement("li");
             li.className = "list-group-item d-flex justify-content-between align-items-center";
             li.dataset.id = id;
             li.innerHTML = `
                 <span>${nome}</span>
                 <div>
+                    <p> ${nome}  </p>
                     <input type="hidden" name="medicamento[]" value="${id}">
                     <button type="button" class="btn btn-danger btn-sm ms-2" onclick="this.closest('li').remove()">Remover</button>
                 </div>

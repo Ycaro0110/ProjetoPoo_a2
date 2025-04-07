@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import model.Receita;
+import model.Medicamento;
 
 public class ReceitaDaoJpa implements InterfaceDao<Receita> {
 
@@ -12,7 +13,9 @@ public class ReceitaDaoJpa implements InterfaceDao<Receita> {
         EntityManager em = ConnFactory.getEntityManager();
         try {
             em.getTransaction().begin();
+
             em.persist(entidade);
+
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -60,9 +63,9 @@ public class ReceitaDaoJpa implements InterfaceDao<Receita> {
         EntityManager em = ConnFactory.getEntityManager();
         try {
             return em.createQuery(
-                "SELECT r FROM Receita r LEFT JOIN FETCH r.medicamentos WHERE r.id = :id", Receita.class)
-                .setParameter("id", id)
-                .getSingleResult();
+                    "SELECT r FROM Receita r LEFT JOIN FETCH r.medicamentos WHERE r.id = :id", Receita.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
         } finally {
             em.close();
         }
@@ -73,10 +76,10 @@ public class ReceitaDaoJpa implements InterfaceDao<Receita> {
         EntityManager em = ConnFactory.getEntityManager();
         try {
             return em.createQuery(
-                "SELECT DISTINCT r FROM Receita r " +
-                "JOIN FETCH r.paciente " +
-                "LEFT JOIN FETCH r.medicamentos", Receita.class)
-                .getResultList();
+                    "SELECT DISTINCT r FROM Receita r "
+                    + "JOIN FETCH r.paciente "
+                    + "LEFT JOIN FETCH r.medicamentos", Receita.class)
+                    .getResultList();
         } finally {
             em.close();
         }
