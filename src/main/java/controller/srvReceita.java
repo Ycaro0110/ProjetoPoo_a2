@@ -61,17 +61,18 @@ public class srvReceita extends HttpServlet {
 
                 // Usa método com JOIN FETCH para evitar LazyInitializationException
                 Receita r = ((ReceitaDaoJpa) daoReceita).buscarComMedicamentos(id);
-
+                List<Medicamento> medicamentosSelecionados = (List<Medicamento>) r.getMedicamentos();
+                
                 List<Paciente> pacientes = daoPaciente.listar();
                 List<Medicamento> medicamentos = daoMedicamento.listar();
-
+               
                 request.setAttribute("receita", r);
                 request.setAttribute("pacientes", pacientes);
                 request.setAttribute("medicamentos", medicamentos);
                 request.setAttribute("acao", "atualizar");
                 request.setAttribute("id", r.getId());
                 request.setAttribute("nomeMedico", r.getNomeMedico());
-
+                
                 request.getRequestDispatcher("adicionar_receita.jsp").forward(request, response);
             }
 
@@ -84,8 +85,8 @@ public class srvReceita extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String acao = request.getParameter("acao");    
-     
+        String acao = request.getParameter("acao");
+
         try {
             InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
             InterfaceDao<Paciente> daoPaciente = DaoFactory.novoPacienteDAO();
@@ -98,8 +99,6 @@ public class srvReceita extends HttpServlet {
 
             Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
             List<Medicamento> listaMedicamentos = new ArrayList<>();
-
-         
 
             if (acao.equals("salvar")) {
 
