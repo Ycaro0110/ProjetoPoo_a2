@@ -82,59 +82,55 @@ public class srvReceita extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        String acao = request.getParameter("acao");
+    String acao = request.getParameter("acao");
 
-        try {
-            InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
-            InterfaceDao<Paciente> daoPaciente = DaoFactory.novoPacienteDAO();
-            InterfaceDao<Medicamento> daoMedicamento = DaoFactory.novoMedicamentoDAO();
+    try {
+        InterfaceDao<Receita> daoReceita = DaoFactory.novoReceitaDAO();
+        InterfaceDao<Paciente> daoPaciente = DaoFactory.novoPacienteDAO();
+        InterfaceDao<Medicamento> daoMedicamento = DaoFactory.novoMedicamentoDAO();
 
-            // Dados do formulário
-            long idPaciente = Long.parseLong(request.getParameter("paciente"));
-            String[] idsMedicamentos = request.getParameterValues("medicamentosID");
-            String nomeMedico = request.getParameter("nomeMedico");
+        long idPaciente = Long.parseLong(request.getParameter("paciente"));
+        String[] idsMedicamentos = request.getParameterValues("medicamentosID");
+        String nomeMedico = request.getParameter("nomeMedico");
 
-            Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
-            List<Medicamento> listaMedicamentos = new ArrayList<>();
+        Paciente paciente = daoPaciente.pesquisarPorId(idPaciente);
+        List<Medicamento> listaMedicamentos = new ArrayList<>();
 
-            if (acao.equals("salvar")) {
-
-                if (idsMedicamentos != null) {
-                    for (String idMed : idsMedicamentos) {
-                        Medicamento m = daoMedicamento.pesquisarPorId(Long.parseLong(idMed));
-                        listaMedicamentos.add(m);
-                    }
-                }
-
-                Receita nova = new Receita();
-                nova.setPaciente(paciente);
-                nova.setMedicamentos(listaMedicamentos);
-
-                nova.setNomeMedico(nomeMedico);
-
-                daoReceita.incluir(nova);
-                response.sendRedirect("srvReceita?acao=listar");
+        // Preenche a lista de medicamentos selecionados (válido tanto para salvar quanto atualizar)
+        if (idsMedicamentos != null) {
+            for (String idMed : idsMedicamentos) {
+                Medicamento m = daoMedicamento.pesquisarPorId(Long.parseLong(idMed));
+                listaMedicamentos.add(m);
             }
-
-            if (acao.equals("atualizar")) {
-                long id = Long.parseLong(request.getParameter("id"));
-                Receita r = daoReceita.pesquisarPorId(id);
-                r.setPaciente(paciente);
-                r.setMedicamentos(listaMedicamentos);
-                r.setNomeMedico(nomeMedico);
-
-                daoReceita.editar(r);
-                response.sendRedirect("srvReceita?acao=listar");
-            }
-
-        } catch (Exception e) {
-            Logger.getLogger(srvReceita.class.getName()).log(Level.SEVERE, null, e);
-            throw new ServletException("Erro ao salvar ou atualizar receita: " + e.getMessage(), e);
         }
+
+        if ("salvar".equals(acao)) {
+            Receita nova = new Receita();
+            nova.setPaciente(paciente);
+            nova.setMedicamentos(listaMedicamentos);
+            nova.setNomeMedico(nomeMedico);
+            daoReceita.incluir(nova);
+            response.sendRedirect("srvReceita?acao=listar");
+        }
+
+        if ("atualizar".equals(acao)) {
+            long id = Long.parseLong(request.getParameter("id"));
+            Receita r = daoReceita.pesquisarPorId(id);
+            r.setPaciente(paciente);
+            r.setMedicamentos(listaMedicamentos); // agora não estará vazia!
+            r.setNomeMedico(nomeMedico);
+            daoReceita.editar(r);
+            response.sendRedirect("srvReceita?acao=listar");
+        }
+
+    } catch (Exception e) {
+        Logger.getLogger(srvReceita.class.getName()).log(Level.SEVERE, null, e);
+        throw new ServletException("Erro ao salvar ou atualizar receita: " + e.getMessage(), e);
     }
+}
 
     @Override
     public String getServletInfo() {

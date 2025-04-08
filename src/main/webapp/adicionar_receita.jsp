@@ -63,14 +63,23 @@
                             <label for="medicamento">Adicionar Medicamento</label>
                             <div class="d-flex">
                                 <select id="selectMedicamento" class="form-control" style="flex:1; margin-right:10px;" multiple name="medicamentosID">
-                                    <option value="">Selecione um medicamento</option>
-                                    <% if (medicamentos != null) {
-                                            for (Medicamento m : medicamentos) {
-                                    %>
-                                    <option value="<%=m.getId()%>" data-nome="<%=m.getNome()%>"><%=m.getNome()%></option>
-                                    <% }
-                                        }%>
-                                </select>                               
+    <% if (medicamentos != null) {
+        for (Medicamento m : medicamentos) {
+            boolean selecionado = false;
+            if (receita != null && receita.getMedicamentos() != null) {
+                for (Medicamento medReceita : receita.getMedicamentos()) {
+                    if (m.getId().equals(medReceita.getId())) {
+                        selecionado = true;
+                        break;
+                    }
+                }
+            }
+    %>
+    <option value="<%=m.getId()%>" <%=selecionado ? "selected" : ""%>><%=m.getNome()%></option>
+    <%  }
+    } %>
+</select>
+                             
                             </div>
                         </div>               
 
